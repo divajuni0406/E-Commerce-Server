@@ -1,16 +1,27 @@
-const dotenv = require('dotenv')
-dotenv.config()
+const dotenv = require('dotenv');
+const express = require('express');
+const morgan = require('morgan');
+const router = require('./routes/index');
+const mongoConnect = require('./config/mongodb').main;
 
-const express = require('express')
-const app = express()
-const morgan = require('morgan')
-const port = process.env.port || 5000
-const router = require('./routes/index')
+const app = express();
+const port = process.env.port || 5000;
+dotenv.config();
 
+// Morgan
+app.use(morgan('dev'));
 
-app.use(router)
+// Body Parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Router
+app.use(router);
 
-app.listen(port, ()=>{
-    console.log(`listen on port ${port}`)
-})
+// Mongo Connection
+mongoConnect();
+
+// Run Server
+app.listen(port, () => {
+    console.log(`listen on port ${port}`);
+});
