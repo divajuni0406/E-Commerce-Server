@@ -5,7 +5,7 @@ const productSchema = new Schema({
     detail:String,
     thumbnail:String,
     recommendation:Boolean,
-    price:Number,
+    price: Number,
     discountId:Schema.Types.ObjectId,
     images:[],
     stock:Number,
