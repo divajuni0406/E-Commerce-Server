@@ -7,10 +7,12 @@ const morgan = require('morgan')
 const port = process.env.port || 5000
 const router = require('./routes/index')
 
+const ConnectionMongoDB = require('./config/mongodb')
+ConnectionMongoDB()
 
 app.use(router)
 
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`listen on port ${port}`)
 })
