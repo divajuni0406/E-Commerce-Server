@@ -3,6 +3,6 @@ const { Profile } = require('../controller/ProfileController')
 const User = require('../models/User');
 
 
-route.get('/profile/:id', Profile)
+route.get('/api/profile/:id', Profile)
 
 module.exports = route
