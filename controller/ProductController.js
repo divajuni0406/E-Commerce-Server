@@ -48,6 +48,22 @@ const getProductById = async (req, res) =>{
         res.status(500).json({message: 'failed to get data'})
     }
 }
+
+const editProduct = async (req, res) => {
+    const data = req.body
+    // const { name, detail, thumbnail, recommendation, price, images, deleted } = req.body
+    // const dataProduct = {
+    //     name: name, detail:detail, thumbnail: thumbnail, recommendation: recommendation, price: price, discountId: discountId, images: images, deleted: deleted
+    // }
+    const id  = req.params.id 
+    try {
+        const editedProduct = await Product.updateOne({_id:id}, {$set:data})
+        res.status(201).json({message:'successfully edit data', data:editedProduct})
+    } catch (error) {
+        res.status(500).json({message:"failed edit data"})
+    }
+}
+
 const deleteProduct = async( req, res) => {
     const id = req.params.id
     try {
@@ -60,5 +76,5 @@ const deleteProduct = async( req, res) => {
 
 
 module.exports = {
-    getAllProduct , createProduct, getProductById, deleteProduct
+    getAllProduct , createProduct, getProductById, deleteProduct, editProduct
 }

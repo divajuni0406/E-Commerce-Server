@@ -6,8 +6,10 @@ const app = express()
 const morgan = require('morgan')
 const port = process.env.port || 5000
 const router = require('./routes/index')
+const cors = require('cors')
 
 
+app.use(cors())
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
