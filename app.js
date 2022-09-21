@@ -2,11 +2,15 @@ const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
 const router = require('./routes/index');
+const cors = require('cors');
 const mongoConnect = require('./config/mongodb').main;
 
 const app = express();
 const port = process.env.port || 5000;
 dotenv.config();
+
+// Cors
+app.use(cors());
 
 // Morgan
 app.use(morgan('dev'));
