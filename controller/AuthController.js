@@ -7,6 +7,8 @@ exports.signup = async (req, res) => {
             username: req.body.username,
             email: req.body.username,
             password: req.body.password,
+            name: req.body.name,
+            birthdate: req.body.birthdate,
         });
 
         const token = jwt.sign(
@@ -21,5 +23,10 @@ exports.signup = async (req, res) => {
             token,
             newUser,
         });
-    } catch (err) {}
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err.message,
+        });
+    }
 };
