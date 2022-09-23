@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose')
 
 const cartDetailSchema = new Schema({
     productId:Schema.Types.ObjectId,
-    userId:Schema.Types.ObjectId,
+    cartId:Schema.Types.ObjectId,
     quantity:Number,
 })
 
