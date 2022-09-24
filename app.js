@@ -10,10 +10,9 @@ const port = process.env.port || 5000;
 dotenv.config();
 
 // Cors
-app.use(cors());
-app.use(morgan('dev'))
-
-app.use(router)
+app.use(cors())
+app.use(morgan("dev"));
+app.use(express.static("public"));
 
 // Body Parser
 app.use(express.json());

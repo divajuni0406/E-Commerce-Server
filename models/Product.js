@@ -1,5 +1,6 @@
-const { model, Schema } = require('mongoose')
+const Mongoose = require('mongoose')
 
+<<<<<<< HEAD
 const productSchema = new Schema({
     name: String,
     detail:String,
@@ -7,11 +8,20 @@ const productSchema = new Schema({
     recommendation:Boolean,
     price: Number,
     discountId:Schema.Types.ObjectId,
+=======
+const productSchema = new Mongoose.Schema({
+    name:{type: String},
+    detail:{type: String},
+    thumbnail:{type: String},
+    recommendation:{type: Boolean},
+    price:{Number},
+    discountId:{type: Mongoose.Schema.Types.ObjectId},
+>>>>>>> origin/api-login
     images:[],
-    stock:Number,
-    deleted:Boolean
+    stock:{type: Number},
+    deleted:{type: Boolean}
 })
 
-const Product = model('Product', productSchema);
+const Product = Mongoose.model('Product', productSchema);
 
 module.exports = Product
