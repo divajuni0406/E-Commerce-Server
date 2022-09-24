@@ -1,8 +1,8 @@
 const route = require('express').Router()
-const HomeRoute = require('./homeRoute')
+const Route = require('./route')
 
 
-route.use(HomeRoute)
+route.use(Route)
 
 
 module.exports = route
