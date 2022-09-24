@@ -1,14 +1,14 @@
 const express = require("express");
 const route = express.Router();
-<<<<<<< HEAD
-const { socialLogin, loginPost } = require("../controller/user");
+const { transactionHistoryPost, transactionHistory, transactionHistoryDetail, forgotPassword, socialLogin, loginPost } = require("../controller/user");
 
 route.post("/loginData", loginPost);
 route.post("/socialLogin", socialLogin);
-=======
-const { forgotPassword } = require("../controller/user");
 
 route.post("/forgotPassword", forgotPassword);
->>>>>>> origin/api-forgotPassword
+
+route.get("/transactionHistoryDetail/:id", transactionHistoryDetail);
+route.get("/transactionHistory/:id", transactionHistory);
+route.post("/transactionHistoryPost", transactionHistoryPost);
 
 module.exports = route;
