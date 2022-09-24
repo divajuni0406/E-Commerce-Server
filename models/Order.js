@@ -1,10 +1,10 @@
-const { model, Schema } = require('mongoose')
+const Mongoose = require('mongoose')
 
-const orderSchema = new Schema({
-    cartId:Schema.Types.ObjectId,
-    price:Number
+const orderSchema = new Mongoose.Schema({
+    userId:{type: Mongoose.Schema.Types.ObjectId, ref: "Cart"},
+    total_order:{type: Number}
 })
 
-const Order = model('Order', orderSchema);
+const Order = Mongoose.model('Order', orderSchema);
 
 module.exports = Order

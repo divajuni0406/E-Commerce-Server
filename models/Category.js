@@ -1,9 +1,9 @@
-const { model, Schema } = require('mongoose')
+const Mongoose = require("mongoose");
 
-const categorySchema = new Schema({
-    categoryName:Schema.Types.ObjectId,
-})
+const categorySchema = new Mongoose.Schema({
+  categoryName: { type: Mongoose.Schema.Types.ObjectId },
+});
 
-const Category = model('Category', categorySchema);
+const Category = Mongoose.model("Category", categorySchema);
 
-module.exports = Category
+module.exports = Category;

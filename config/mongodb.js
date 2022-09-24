@@ -1,9 +1,16 @@
-const mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
-async function main() {
-  await mongoose.connect(`mongodb+srv://fsw23c9t1:${process.env.MONGOPASS}@fsw23c9t1.09vmpg5.mongodb.net/?retryWrites=true&w=majority`);
-}
+const connectDb = async () => {
+  try {
+    const conn = await Mongoose.connect(`${process.env.MONGO_URI}`, {
+      useNewUrlParser: true,
+      useUniFiedTopology: true,
+    });
+    console.log(`MongoDb Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
-module.exports = {
-    main
-}
+module.exports = connectDb;
