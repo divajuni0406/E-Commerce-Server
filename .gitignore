@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -136,3 +137,7 @@ dist
 build/*
 dist/*
 config/mongodb.js
+=======
+node_modules
+.env
+>>>>>>> origin/cart-server
