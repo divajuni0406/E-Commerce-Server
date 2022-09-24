@@ -3,8 +3,13 @@ const HomeRoute = require('./homeRoute');
 const UserRoute = require('./userRoute');
 const ProductListRoute = require('./productListRoute');
 
-route.use(HomeRoute);
+const ProductRoute = require('./productRoute')
+
 route.use(UserRoute);
 route.use(ProductListRoute);
 
-module.exports = route;
+route.use(HomeRoute)
+route.use(ProductRoute)
+
+
+module.exports = route

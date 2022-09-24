@@ -11,9 +11,9 @@ dotenv.config();
 
 // Cors
 app.use(cors());
+app.use(morgan('dev'))
 
-// Morgan
-app.use(morgan('dev'));
+app.use(router)
 
 // Body Parser
 app.use(express.json());
@@ -29,3 +29,8 @@ mongoConnect();
 app.listen(port, () => {
     console.log(`listen on port ${port}`);
 });
+
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
