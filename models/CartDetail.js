@@ -1,11 +1,11 @@
-const { model, Schema } = require('mongoose')
+const Mongoose = require("mongoose");
 
-const cartDetailSchema = new Schema({
-    productId:Schema.Types.ObjectId,
-    userId:Schema.Types.ObjectId,
-    quantity:Number,
-})
+const cartDetailSchema = new Mongoose.Schema({
+  productId: { type: Mongoose.Schema.Types.ObjectId },
+  userId: { type: Mongoose.Schema.Types.ObjectId },
+  quantity: { type: Number },
+});
 
-const CartDetail = model('CartDetail', cartDetailSchema);
+const CartDetail = Mongoose.model("CartDetail", cartDetailSchema);
 
-module.exports = CartDetail
+module.exports = CartDetail;
