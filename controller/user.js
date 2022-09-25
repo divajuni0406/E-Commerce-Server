@@ -109,18 +109,37 @@ exports.forgotPassword = async (req, res) => {
 
 exports.transactionHistoryPost = async (req, res) => {
   let { userId, price, quantity, productId, total_order, subTotal } = req.body;
-  try {
-    const order = await Order.create({ userId, total_order });
-    console.log(order.id);
-    const orderDetail = await OrderDetail.create({ orderId: order.id, productId, price, quantity, subTotal });
-    res.send({
-      statusCode: 200,
-      message: "successfull to create your order",
-      result: { order, orderDetail },
-    });
-  } catch (error) {
-    res.status(500).send(error.message);
-    console.log(error);
+  const findOrder = await Order.findOne({ userId });
+  if (findOrder) {
+    try {
+      const updateOrder = await Order.updateOne({ userId }, { $set: { total_order: findOrder.total_order + total_order } });
+      const orderDetail = await OrderDetail.create({ orderId: findOrder.id, productId, price, quantity, subTotal });
+      if (updateOrder) {
+        res.status(200).send({ message: "successfull to update and create your order", result: { updateOrder, orderDetail }, statusCode: 200 });
+      } else {
+        res.status(400).send({ message: "failed to update your order", statusCode: 400 });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error.message);
+    }
+  } else {
+    try {
+      const order = await Order.create({ userId, total_order });
+      const orderDetail = await OrderDetail.create({ orderId: order.id, productId, price, quantity, subTotal });
+      if (order && orderDetail) {
+        res.send({
+          statusCode: 200,
+          message: "successfull to create your order",
+          result: { order, orderDetail },
+        });
+      } else {
+        res.status(400).send({ message: "failed to create your order", statusCode: 400 });
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+      console.log(error);
+    }
   }
 };
 
@@ -138,10 +157,10 @@ exports.transactionHistory = async (req, res) => {
         },
       },
       {
-        "$project": {
-          "user.password": 0
-        }
-      }
+        $project: {
+          "user.password": 0,
+        },
+      },
     ]);
     res.send({
       statusCode: 200,
@@ -155,10 +174,9 @@ exports.transactionHistory = async (req, res) => {
 };
 
 exports.transactionHistoryDetail = async (req, res) => {
-  let orderId = req.params.id;
+  let userId = req.params.id;
   try {
     const transactionHistoryDetail = await OrderDetail.aggregate([
-      { $match: { orderId: ObjectId(orderId) } },
       {
         $lookup: {
           from: "orders",
@@ -175,12 +193,17 @@ exports.transactionHistoryDetail = async (req, res) => {
           as: "products",
         },
       },
+      { $match: { "order.userId": ObjectId(userId) } },
     ]);
-    res.send({
-      statusCode: 200,
-      message: "successfull to get your transaction history",
-      result: transactionHistoryDetail,
-    });
+    if(transactionHistoryDetail){
+      res.send({
+        statusCode: 200,
+        message: "successfull to get your transaction history detail",
+        result: transactionHistoryDetail,
+      });
+    } else{
+      res.status(400).send({message: "failed to get your transaction history detail", statusCode: 400})
+    }
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error);
