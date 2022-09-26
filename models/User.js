@@ -1,5 +1,4 @@
 const { model, Schema } = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
     username: {
@@ -36,12 +35,6 @@ const userSchema = new Schema({
             message: 'Birthdate must earlier than today',
         },
     },
-});
-
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
 });
 
 const User = model('User', userSchema);
