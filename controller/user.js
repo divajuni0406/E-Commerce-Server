@@ -242,3 +242,14 @@ exports.transactionHistoryDetail = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.getuser = async (req, res) => {
+    try {
+      let data = await Users.find()
+      res.json({
+        data: data
+      })
+    } catch (error) {
+      console.log(error)
+    }
+}
