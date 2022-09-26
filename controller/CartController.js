@@ -5,21 +5,24 @@ const getCart=async(req,res)=>{
     let userId = req.params.userId
     try {
         const cart = await Cart.findOne({userId:userId, status:'unpaid'})
-        const carts = await CartDetail.aggregate([
-            {$match:{cartId:cart._id}},
-            {$lookup:{
-                from:'products',
-                localField:'productId',
-                foreignField:'_id',
-                as:'product'
-            }}
-        ])
-
-        carts.forEach((val)=>{
-            val.timestamp = ObjectId(val._id).getTimestamp()
-        })
-
-        return res.json({carts})
+        if(cart){
+            const carts = await CartDetail.aggregate([
+                {$match:{cartId:cart._id}},
+                {$lookup:{
+                    from:'products',
+                    localField:'productId',
+                    foreignField:'_id',
+                    as:'product'
+                }}
+            ])
+    
+            carts.forEach((val)=>{
+                val.timestamp = ObjectId(val._id).getTimestamp()
+            })
+    
+            return res.json({carts})
+        }
+            return res.json({message:'no cart', carts:[]})
     } catch (error) {
         console.log(error)        
     }
