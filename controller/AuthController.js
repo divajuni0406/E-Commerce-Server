@@ -1,12 +1,15 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const Cryptr = require("cryptr");
+const SecretKey = "secretKey";
+const passConverter = new Cryptr(SecretKey);
 
 exports.signup = async (req, res) => {
     try {
         const newUser = await User.create({
             username: req.body.username,
-            email: req.body.username,
-            password: req.body.password,
+            email: req.body.email,
+            password: passConverter.encrypt(req.body.password),
             name: req.body.name,
             birthdate: req.body.birthdate,
         });

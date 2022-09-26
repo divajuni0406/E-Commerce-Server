@@ -9,8 +9,11 @@ const Route = require('./route')
 
 const ProductRoute = require('./productRoute')
 
+const midtransRoute = require('./midtrans')
+
 route.use(UserRoute);
 route.use(ProductListRoute);
+route.use(midtransRoute)
 
 // route.use(HomeRoute)
 route.use(ProductRoute)
