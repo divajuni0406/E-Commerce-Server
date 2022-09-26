@@ -64,6 +64,7 @@ const postCart=async(req,res)=>{
 const changeQtyProductInCart=async(req,res)=>{
     const { cartId, productId, quantity } = req.body
 
+
     try {
         await CartDetail.findOneAndUpdate({cartId, productId}, {$set:{quantity:quantity}})
         res.json({message:'berhasil update'})
