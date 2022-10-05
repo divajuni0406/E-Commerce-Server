@@ -19,9 +19,9 @@ const getAllProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     
-    const { name, detail, thumbnail, recommendation, price, discountId, images, deleted } = req.body
+    const { name, detail, thumbnail, recommendation, price, discountId, images, deleted, category } = req.body
     const dataProduct = {
-        name: name, detail:detail, thumbnail: thumbnail, recommendation: recommendation, price: price, discountId: discountId, images: images, deleted: deleted
+        name: name, detail:detail, thumbnail: thumbnail, recommendation: recommendation, price: price, discountId: discountId, images: images, deleted: deleted, category
     }
     try {
         const addProduct = await Product.create(dataProduct)
@@ -74,7 +74,36 @@ const deleteProduct = async( req, res) => {
     }
 }
 
+const findProductCategory = async(req, res) => {
+    const {category} = req.body;
+    try {
+        const findProducts = await Product.find({category: { $regex : new RegExp(category, "i") }})
+        if(findProducts){
+            res.send({message: "Successfull to get product by category", statusCode:200, result:findProducts})
+        } else {
+            res.status(404).send({message: "Products Not Found"})
+        }
+    } catch (error) {
+        res.status(500).send(error.message)
+        console.log(error)
+    }
+}
+
+const searchProduct = async (req, res) => {
+    const {search} = req.body;
+    try {
+        const searchProduct = await Product.find({$text : {$search: search}})
+        if(searchProduct){
+            res.send({message: "Successfull to get products", statusCode:200, result: searchProduct})
+        } else {
+            res.status(404).send({message: "Products Not Found"})
+        }
+    } catch (error) {
+        res.status(500).send(error.message)
+        console.log(error)
+    }
+}
 
 module.exports = {
-    getAllProduct , createProduct, getProductById, deleteProduct, editProduct
+    getAllProduct , createProduct, getProductById, deleteProduct, editProduct, findProductCategory, searchProduct
 }

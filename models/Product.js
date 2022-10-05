@@ -9,8 +9,10 @@ const productSchema = new Mongoose.Schema({
     discountId:{type: Mongoose.Schema.Types.ObjectId},
     images:[],
     stock:{type: Number},
+    category: {type: String},
     deleted:{type: Boolean}
 })
+productSchema.index({name: 'text', detail: 'text', price: 'text', category: 'text'})
 
 const Product = Mongoose.model('Product', productSchema);
 
