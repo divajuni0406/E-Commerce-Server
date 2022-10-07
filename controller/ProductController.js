@@ -19,15 +19,14 @@ const getAllProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     
-    const { name, detail, thumbnail, recommendation, price, discountId, images, deleted } = req.body
+    const { name, detail, summary,category, recommendation, price, discountId, images,size,deleted } = req.body
     const dataProduct = {
-        name: name, detail:detail, thumbnail: thumbnail, recommendation: recommendation, price: price, discountId: discountId, images: images, deleted: deleted
+        name: name, detail:detail, summary: summary, category:category, recommendation: recommendation, price: price, discountId: discountId, images: images, size:size,deleted: deleted
     }
     try {
         const addProduct = await Product.create(dataProduct)
-        const getdata = await Product.find()
         res.status(200).json({
-            message: "successfully create data",
+            message: "successfully create data"
         })
     } catch (error) {
         res.status(500).json({message: 'failed to create data'})

@@ -11,6 +11,4 @@ route.get("/transactionHistoryDetail/:id", transactionHistoryDetail);
 route.get("/transactionHistory/:id", transactionHistory);
 route.post("/transactionHistoryPost", transactionHistoryPost);
 
-route.get('/datauser',getuser)
-
 module.exports = route;
