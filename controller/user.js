@@ -176,6 +176,7 @@ exports.transactionHistory = async (req, res) => {
 
 exports.transactionHistoryDetail = async (req, res) => {
   let userId = req.params.id;
+  console.log("ytsddf",userId)
   try {
     const transactionHistoryDetail = await OrderDetail.aggregate([
       {
