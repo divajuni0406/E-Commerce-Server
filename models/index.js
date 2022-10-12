@@ -6,7 +6,8 @@ const OrderDetail = require('./OrderDetail')
 const Product = require('./Product')
 const Category = require('./Category')
 const PaymentTransaction = require('./PaymentTransaction')
+const Blog = require('./Blog')
 
 module.exports = {
-    User,Cart,CartDetail,Order,OrderDetail,Product,Category,PaymentTransaction
+    User,Cart,CartDetail,Order,OrderDetail,Product,Category,PaymentTransaction,Blog
 }

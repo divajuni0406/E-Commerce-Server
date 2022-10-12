@@ -3,12 +3,13 @@ const Mongoose = require('mongoose')
 const productSchema = new Mongoose.Schema({
     name:{type: String},
     detail:{type: String},
-    thumbnail:{type: String},
-    recommendation:{type: Boolean},
-    price:{type:Number},
+    summary: { type: String },
+    category:{type: String},
+    recommendation: { type: Boolean },
+    price:{type: Number},
     discountId:{type: Mongoose.Schema.Types.ObjectId},
-    images:[],
-    stock:{type: Number},
+    images: [],
+    size:[],
     deleted:{type: Boolean}
 })
 

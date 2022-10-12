@@ -11,6 +11,8 @@ const ProductRoute = require('./productRoute')
 
 const midtransRoute = require('./midtrans')
 
+const BlogRoute = require('./blogRoute')
+
 route.use(UserRoute);
 route.use(ProductListRoute);
 route.use(midtransRoute)
@@ -19,6 +21,7 @@ route.use(midtransRoute)
 route.use(ProductRoute)
 route.use(ProfileRoute)
 route.use(Route)
+route.use(BlogRoute)
 
 
 route.use(CartRoute)
