@@ -9,6 +9,7 @@ const app = express();
 const port = process.env.port || 5000;
 dotenv.config();
 
+app.set("view engine", "ejs");
 // Cors
 app.use(cors())
 app.use(morgan("dev"));

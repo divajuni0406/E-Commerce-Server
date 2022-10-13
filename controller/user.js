@@ -10,7 +10,7 @@ const Mongoose = require("mongoose");
 const ObjectId = Mongoose.Types.ObjectId;
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/.env" });
-const { Cart } = require('../models')
+const { Cart } = require("../models");
 
 exports.loginPost = async (req, res) => {
   const { username, password } = req.body;
@@ -107,37 +107,36 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-
 exports.transactionHistoryPost = async (req, res) => {
   let { userId, total_order, carts } = req.body;
   try {
-    const cart = await Cart.findOne({userId:userId, status:'unpaid'})
-    await Cart.updateOne({_id:cart._id, status:'unpaid'}, {$set:{status:'paid'}})
+    const cart = await Cart.findOne({ userId: userId, status: "unpaid" });
+    await Cart.updateOne({ _id: cart._id, status: "unpaid" }, { $set: { status: "paid" } });
 
     const order = await Order.create({ userId, total_order });
-    const updateCart = carts.map((val)=>{
-      val.subTotal = val.quantity*val.product[0].price
-      val.orderId = order._id
-      val.price = val.product[0].price
-      delete val.cartId
-      delete val.product
-      delete val.timestamp
-      return val
-    })
+    const updateCart = carts.map((val) => {
+      val.subTotal = val.quantity * val.product[0].price;
+      val.orderId = order._id;
+      val.price = val.product[0].price;
+      delete val.cartId;
+      delete val.product;
+      delete val.timestamp;
+      return val;
+    });
 
-    let postOrderDetail = updateCart.map((val)=>OrderDetail.create(val))
+    let postOrderDetail = updateCart.map((val) => OrderDetail.create(val));
 
     Promise.all(postOrderDetail)
-    .then((result)=>{
+      .then((result) => {
         res.send({
-        statusCode: 200,
-        message: "successfull to create your order",
-        result: result
+          statusCode: 200,
+          message: "successfull to create your order",
+          result: result,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error);
@@ -176,7 +175,7 @@ exports.transactionHistory = async (req, res) => {
 
 exports.transactionHistoryDetail = async (req, res) => {
   let userId = req.params.id;
-  console.log("ytsddf",userId)
+  console.log("ytsddf", userId);
   try {
     const transactionHistoryDetail = await OrderDetail.aggregate([
       {
@@ -197,14 +196,14 @@ exports.transactionHistoryDetail = async (req, res) => {
       },
       { $match: { "order.userId": ObjectId(userId) } },
     ]);
-    if(transactionHistoryDetail){
+    if (transactionHistoryDetail) {
       res.send({
         statusCode: 200,
         message: "successfull to get your transaction history detail",
         result: transactionHistoryDetail,
       });
-    } else{
-      res.status(400).send({message: "failed to get your transaction history detail", statusCode: 400})
+    } else {
+      res.status(400).send({ message: "failed to get your transaction history detail", statusCode: 400 });
     }
   } catch (error) {
     res.status(500).send(error.message);

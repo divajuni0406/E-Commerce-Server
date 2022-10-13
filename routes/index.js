@@ -4,6 +4,7 @@ const UserRoute = require('./userRoute');
 const ProductListRoute = require('./productListRoute');
 const ProfileRoute = require('./profileRoute')
 const CartRoute = require('./cartRoute')
+const AuthRender = require('./authRender')
 
 const Route = require('./route')
 
@@ -19,6 +20,7 @@ route.use(midtransRoute)
 route.use(ProductRoute)
 route.use(ProfileRoute)
 route.use(Route)
+route.use(AuthRender)
 
 
 route.use(CartRoute)
