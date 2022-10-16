@@ -9,8 +9,7 @@ const productSchema = new Mongoose.Schema({
     price: { type: Number },
     discountId: { type: Mongoose.Schema.Types.ObjectId },
     images: [],
-    size: [],
-    category: { type: String },
+    size: { type: Object },
     deleted: { type: Boolean }
 })
 productSchema.index({ name: 'text', detail: 'text', price: 'text', category: 'text' })
