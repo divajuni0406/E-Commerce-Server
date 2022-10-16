@@ -18,7 +18,14 @@ const userSchema = new Schema({
         lowercase: true,
         trim: true,
     },
-    role: String,
+    role: {
+        type: String,
+        enum: {
+            values: ['admin', 'user'],
+            message: '{VALUE} not supported',
+        },
+        default: 'user',
+    },
     deleted: {
         type: Boolean,
         default: false,

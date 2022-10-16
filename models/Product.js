@@ -1,17 +1,19 @@
 const Mongoose = require('mongoose')
 
 const productSchema = new Mongoose.Schema({
-    name:{type: String},
-    detail:{type: String},
+    name: { type: String },
+    detail: { type: String },
     summary: { type: String },
-    category:{type: String},
+    category: { type: String },
     recommendation: { type: Boolean },
-    price:{type: Number},
-    discountId:{type: Mongoose.Schema.Types.ObjectId},
+    price: { type: Number },
+    discountId: { type: Mongoose.Schema.Types.ObjectId },
     images: [],
-    size:[],
-    deleted:{type: Boolean}
+    size: [],
+    category: { type: String },
+    deleted: { type: Boolean }
 })
+productSchema.index({ name: 'text', detail: 'text', price: 'text', category: 'text' })
 
 const Product = Mongoose.model('Product', productSchema);
 
