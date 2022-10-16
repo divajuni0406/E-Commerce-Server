@@ -3,9 +3,9 @@ const { getAllProduct, createProduct, getProductById, deleteProduct, editProduct
 const { authApiAdmin } = require('../controller/authorizeRoutes')
 
 // authorization belum buat
-route.post("/api/product", getAllProduct);
+route.get("/api/product", getAllProduct);
 route.get("/api/productCategory", findProductCategory);
-route.get("/api/searchProduct", searchProduct);
+route.post("/api/searchProduct", searchProduct);
 route.post("/api/create-product", authApiAdmin, createProduct);
 route.get("/api/product/:id", getProductById);
 route.patch("/api/edit-data/:id", authApiAdmin, editProduct);
