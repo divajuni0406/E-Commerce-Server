@@ -9,7 +9,7 @@ const productSchema = new Mongoose.Schema({
     price:{type: Number},
     discountId:{type: Mongoose.Schema.Types.ObjectId},
     images: [],
-    size:[],
+    size:{type: Object},
     deleted:{type: Boolean}
 })
 
