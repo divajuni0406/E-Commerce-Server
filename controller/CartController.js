@@ -4,10 +4,10 @@ const { ObjectId } = require('mongodb')
 const getCart=async(req,res)=>{
     let userId = req.params.userId
     try {
-        const cart = await Cart.findOne({userId:userId, status:'unpaid'})
-        if(cart){
+        const getCart = await Cart.findOne({userId:userId, status:'unpaid'})
+        if(getCart){
             const carts = await CartDetail.aggregate([
-                {$match:{cartId:cart._id}},
+                {$match:{cartId:getCart._id}},
                 {$lookup:{
                     from:'products',
                     localField:'productId',
@@ -19,7 +19,6 @@ const getCart=async(req,res)=>{
             carts.forEach((val)=>{
                 val.timestamp = ObjectId(val._id).getTimestamp()
             })
-    
             return res.json({carts})
         }
             return res.json({message:'no cart', carts:[]})
@@ -39,7 +38,6 @@ const postCart=async(req,res)=>{
                 cartIsAvailable = await Cart.create({userId:userId, status:'unpaid'})
             }
 
-        console.log(size)
             
         let dataDetail = {
             cartId:cartIsAvailable._id,
