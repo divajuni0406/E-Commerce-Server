@@ -28,6 +28,7 @@ exports.authApiAdmin = async (req, res, next) => {
   let authHeader = req.headers["authorization"];
   let authToken = authHeader && authHeader.split(" ")[1];
   if (!authToken) {
+    console.log('assasassa')
     return res.status(401).redirect("/authorization");
   }
   try {
