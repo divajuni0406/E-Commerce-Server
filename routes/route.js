@@ -8,7 +8,7 @@ route.post("/socialLogin", socialLogin);
 
 route.post("/forgotPassword", forgotPassword);
 
-route.get("/transactionHistoryDetail/:id", authApiGeneral, transactionHistoryDetail);
+route.get("/transactionHistoryDetail/:id", transactionHistoryDetail); //authApiGeneral,
 route.get("/transactionHistory/:id", authApiGeneral, transactionHistory);
 route.post("/transactionHistoryPost", authApiGeneral, transactionHistoryPost);
 
