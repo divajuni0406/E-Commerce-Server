@@ -22,15 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 // Router
 app.use(router);
 
-// Mongo Connection
-mongoConnect();
-
-// Run Server
-app.listen(port, () => {
-    console.log(`listen on port ${port}`);
-});
-
 app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Something broke!')
 })
+
+
+module.exports = app
