@@ -4,10 +4,10 @@ const { ObjectId } = require('mongodb')
 const getCart=async(req,res)=>{
     let userId = req.params.userId
     try {
-        const cart = await Cart.findOne({userId:userId, status:'unpaid'})
-        if(cart){
+        const getCart = await Cart.findOne({userId:userId, status:'unpaid'})
+        if(getCart){
             const carts = await CartDetail.aggregate([
-                {$match:{cartId:cart._id}},
+                {$match:{cartId:getCart._id}},
                 {$lookup:{
                     from:'products',
                     localField:'productId',
@@ -19,7 +19,6 @@ const getCart=async(req,res)=>{
             carts.forEach((val)=>{
                 val.timestamp = ObjectId(val._id).getTimestamp()
             })
-    
             return res.json({carts})
         }
             return res.json({message:'no cart', carts:[]})
@@ -32,7 +31,7 @@ const getCart=async(req,res)=>{
 
 const postCart=async(req,res)=>{
     try {
-        let {productId, quantity, userId} = req.body
+        let {productId, quantity, userId, size} = req.body
         let cartIsAvailable = await Cart.findOne({userId:userId, status:'unpaid'})
 
             if(!cartIsAvailable){
@@ -42,7 +41,7 @@ const postCart=async(req,res)=>{
             
         let dataDetail = {
             cartId:cartIsAvailable._id,
-            productId,quantity
+            productId,quantity,size
         }
 
         await CartDetail.create(dataDetail)
@@ -62,11 +61,10 @@ const postCart=async(req,res)=>{
 }
 
 const changeQtyProductInCart=async(req,res)=>{
-    const { cartId, productId, quantity } = req.body
-
+    const { cartId, productId, quantity, size } = req.body
 
     try {
-        await CartDetail.findOneAndUpdate({cartId, productId}, {$set:{quantity:quantity}})
+        await CartDetail.findOneAndUpdate({cartId, productId,size}, {$set:{quantity:quantity}})
         res.json({message:'berhasil update'})
     } catch (error) {
         console.log(error, 'error')
@@ -74,11 +72,11 @@ const changeQtyProductInCart=async(req,res)=>{
 }
 
 const deleteProductInCart=async(req,res)=>{
-    const { cartId, productId } = req.body
+    const { cartId, productId, size } = req.body
     console.log(cartId, productId)
 
     try {
-        await CartDetail.findOneAndRemove({cartId, productId})
+        await CartDetail.findOneAndRemove({cartId, productId, size})
         res.json({message:'berhasil delete'})
     } catch (error) {
         console.log(error)
