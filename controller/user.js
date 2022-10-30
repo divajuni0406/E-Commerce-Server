@@ -48,7 +48,6 @@ exports.loginPost = async (req, res) => {
       } else {
         res.status(400).send({
           message: "Failed to login. Invalid Username or Password",
-          googleMessage: "Sorry, please register your account",
           statusCode: 400,
         });
       }
@@ -165,18 +164,32 @@ exports.forgotPasswordVerification = async (req, res) => {
     console.log(error);
   }
 };
-
+// BELUM
 exports.transactionHistoryPost = async (req, res) => {
   let { userId, total_order, carts } = req.body;
   try {
     const cart = await Cart.findOne({ userId: userId, status: "unpaid" });
+    console.log(
+      cart,
+      "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+    );
+    if (!cart || undefined) {
+      return res
+        .status(400)
+        .send({ message: "don't have any carts", result: null });
+    }
     await Cart.updateOne(
       { _id: cart._id, status: "unpaid" },
       { $set: { status: "paid" } }
     );
 
     const order = await Order.create({ userId, total_order });
+    console.log(
+      carts,
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    );
     const updateCart = carts.map((val) => {
+      console.log(val, "kkkkkkkkkkkkkkkk");
       val.subTotal = val.quantity * val.product[0].price;
       val.orderId = order._id;
       val.price = val.product[0].price;
@@ -187,18 +200,23 @@ exports.transactionHistoryPost = async (req, res) => {
     });
 
     let postOrderDetail = updateCart.map((val) => OrderDetail.create(val));
-
-    Promise.all(postOrderDetail)
-      .then((result) => {
-        res.send({
-          statusCode: 200,
-          message: "successfull to create your order",
-          result: result,
+    console.log(postOrderDetail, "akakakakakakak");
+    if (!postOrderDetail) {
+      res.status(400).send({ message: "failed to create your order history" });
+    } else {
+      Promise.all(postOrderDetail)
+        .then((result) => {
+          console.log(result, "jjjjjjjjjjjjjjjjjjjj");
+          res.send({
+            statusCode: 200,
+            message: "successfull to create your order",
+            result: result,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    }
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error);
@@ -207,6 +225,14 @@ exports.transactionHistoryPost = async (req, res) => {
 
 exports.transactionHistory = async (req, res) => {
   let userId = req.params.id;
+  const users = await Users.findById({ _id: userId });
+  console.log(
+    userId,
+    "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
+  );
+  if (!users) {
+    return res.status(400).send({ message: "user not found" });
+  }
   try {
     const transactionHistory = await Order.aggregate([
       { $match: { userId: ObjectId(userId) } },
@@ -224,11 +250,23 @@ exports.transactionHistory = async (req, res) => {
         },
       },
     ]);
-    res.send({
-      statusCode: 200,
-      message: "successfull to get your transaction history",
-      result: transactionHistory,
-    });
+    if (transactionHistory.length > 0) {
+      res.send({
+        statusCode: 200,
+        message: "successfull to get your transaction history",
+        result: transactionHistory,
+      });
+    } else if (transactionHistory.length === 0) {
+      res.status(404).send({
+        message: "you don't have any transaction histories yet",
+        statusCode: 404,
+      });
+    } else {
+      res.status(400).send({
+        message: "failed to get transaction histories, something wrong!",
+        statusCode: 400,
+      });
+    }
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error);
@@ -237,6 +275,10 @@ exports.transactionHistory = async (req, res) => {
 
 exports.transactionHistoryDetail = async (req, res) => {
   let userId = req.params.id;
+  const users = await Users.findById({ _id: userId });
+  if (!users) {
+    return res.status(400).send({ message: "user not found" });
+  }
   try {
     const transactionHistoryDetail = await OrderDetail.aggregate([
       {
@@ -257,15 +299,20 @@ exports.transactionHistoryDetail = async (req, res) => {
       },
       { $match: { "order.userId": ObjectId(userId) } },
     ]);
-    if (transactionHistoryDetail) {
+    if (transactionHistoryDetail.length > 0) {
       res.send({
         statusCode: 200,
         message: "successfull to get your transaction history detail",
         result: transactionHistoryDetail,
       });
+    } else if (transactionHistory.length === 0) {
+      res.status(404).send({
+        message: "you don't have any transaction histories yet",
+        statusCode: 404,
+      });
     } else {
       res.status(400).send({
-        message: "failed to get your transaction history detail",
+        message: "failed to get transaction histories, something wrong!",
         statusCode: 400,
       });
     }
