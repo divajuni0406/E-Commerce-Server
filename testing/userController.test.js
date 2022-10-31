@@ -1,7 +1,22 @@
 const request = require("supertest");
 const router = require("../app.js");
-let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzE1YTgwZGI0ZmFjNjJkNjA2NzA5YyIsInVzZXJuYW1lIjoiZGl2YWp1bmkiLCJlbWFpbCI6ImRpdmFqdW5pIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjY3MTMxMDMwLCJleHAiOjE2NjcyMTc0MzB9.Ais5qXnIvLSmfa-Bl8iauWNEkKeBllLJVF-toPnn6Do`;
+let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzE1YTgwZGI0ZmFjNjJkNjA2NzA5YyIsInVzZXJuYW1lIjoiZGl2YWp1bmkiLCJlbWFpbCI6ImRpdmFqdW5pIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjY3MjA3MTA5LCJleHAiOjE2NjcyOTM1MDl9.dWBrMQehUqGDlr53l36_Ym3HEyIiq1FpLZZde2HhJgQ`;
 jest.setTimeout(30000);
+
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+/* Connecting to the database before each test. */
+beforeEach(async () => {
+  await mongoose.connect(
+    `mongodb+srv://fsw23c9t1:${process.env.MONGOPASS}@fsw23c9t1.09vmpg5.mongodb.net/?retryWrites=true&w=majority`
+  );
+});
+
+/* Closing database connection after each test. */
+afterEach(async () => {
+  await mongoose.connection.close();
+});
 
 // positive case
 describe("login post", () => {
@@ -238,6 +253,7 @@ describe("get transaction history", () => {
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"
     );
+    expect(response._body.result.length).toBeGreaterThan(0);
   });
 
   // wrong
@@ -265,7 +281,7 @@ describe("get transaction history", () => {
       response,
       "alllllllllllllllllllllllllll"
     );
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(404);
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"
     );
@@ -299,6 +315,7 @@ describe("get transaction history detail", () => {
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"
     );
+    expect(response._body.result.length).toBeGreaterThan(0);
   });
 
   // wrong
@@ -326,7 +343,7 @@ describe("get transaction history detail", () => {
       response,
       "alllllllllllllllllllllllllll"
     );
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(404);
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"
     );

@@ -101,7 +101,7 @@ const findProductCategory = async (req, res) => {
   const { category } = req.body;
   try {
     const findProducts = await Product.find({
-      category: category.lowerCase(),
+      category: category.toLowerCase(),
     });
     if (findProducts.length > 0) {
       res.send({
@@ -125,6 +125,14 @@ const findProductCategory = async (req, res) => {
 
 const searchProduct = async (req, res) => {
   const { search } = req.body;
+  console.log(search, "jssssssssssssssssssssssss");
+  if (search === undefined) {
+    res.status(400).send({
+      message: "something wrong in search",
+      statusCode: 400,
+    });
+    return;
+  }
   try {
     const searchProduct = await Product.find({
       $or: [

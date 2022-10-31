@@ -141,11 +141,12 @@ exports.forgotPasswordVerification = async (req, res) => {
         process.env.JWT_TOKEN_SECRET
       );
       await findUser.updateOne({ tokenResetPassword: token });
+      let name = email.substring(0, email.lastIndexOf("@"));
       const templateEmail = {
         from: "Sober Team <idhamdummy1@gmail.com>",
         to: email,
         subject: "Link To Reset Password",
-        html: `<p>Dear Mr/Mrs/Ms ${email} Please Click Link Below to Reset Your Password</p> <p>${process.env.CLIENT_URL}/resetPassword/${token}`,
+        html: `<p>Dear Mr/Mrs/Ms ${name} Please Click Link Below to Reset Your Password</p> <p>${process.env.CLIENT_URL}/resetPassword/${token}`,
       };
       const resetPass = await resetPasswordVerif(templateEmail);
       if (resetPass) {
@@ -305,7 +306,7 @@ exports.transactionHistoryDetail = async (req, res) => {
         message: "successfull to get your transaction history detail",
         result: transactionHistoryDetail,
       });
-    } else if (transactionHistory.length === 0) {
+    } else if (transactionHistoryDetail.length === 0) {
       res.status(404).send({
         message: "you don't have any transaction histories yet",
         statusCode: 404,

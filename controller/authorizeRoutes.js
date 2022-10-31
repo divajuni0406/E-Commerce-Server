@@ -8,7 +8,6 @@ exports.authPage = (req, res) => {
 
 exports.authApiGeneral = async (req, res, next) => {
   let authHeader = req.headers["authorization"];
-  console.log(authHeader, "kkkkkkkkkkkkkkkkkkkkkkkkkkk");
   let authToken = authHeader && authHeader.split(" ")[1];
   if (!authToken || authToken === null || authToken === "") {
     return res.status(401).redirect("/authorization");
