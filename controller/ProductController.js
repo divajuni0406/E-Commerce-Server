@@ -24,6 +24,7 @@ const createProduct = (req, res) => {
     const path = '/product/images'
     const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }]) 
     upload(req, res, async (err) => {
+        if(err) return res.status(500).json({message: "Failed"})
         const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
         const imagesLink = req.body.imagesLink
         const { images } = req.files
@@ -89,10 +90,11 @@ const getProductById = async (req, res) => {
     }
 }
 
-const updateImgProduct = (req, res, next) => {
+const updateImgProduct = (req, res) => {
     const path = '/product/images'
     const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }])
     upload(req, res, async (err) => {
+        if(err) return res.status(500).json({message: "ada yang salah"})
         const id = req.params.id
         const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
         const imagesLink = req.body.images

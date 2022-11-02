@@ -6,6 +6,6 @@ const bannerSchema = new Mongoose.Schema({
     deleted:{ type: Boolean }
 })
 
-const Banner = model('Banner', bannerSchema);
+const Banner = Mongoose.model('Banner', bannerSchema);
 
 module.exports = Banner

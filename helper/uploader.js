@@ -27,7 +27,7 @@ const uploader = ( destination, fileNameImage ) => { // di buat function agar bi
     })
 
     const fileFilter =(req,file,cb)=>{ // untuk filter jenis file
-        const allowedExt = /\.(jpg|jpeg|png|gif|pdf|doc|docx|xlsx)$/; // regex untuk list extention file yang di bolehkan
+        const allowedExt = /\.(jpg|jpeg|png)$/; // regex untuk list extention file yang di bolehkan
         if (!file.originalname.match(allowedExt)) return cb(new Error("Only selected file type are allowed"),false)
         cb(null,true)
     }
