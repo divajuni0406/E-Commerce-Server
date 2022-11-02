@@ -1,5 +1,7 @@
 const { Product } = require('../models/index')
 const { uploader } = require('../helper/uploader')
+const fs = require('fs')
+const multer = require('multer')
 
 const getAllProduct = async (req, res) => {
     try {
@@ -19,44 +21,56 @@ const getAllProduct = async (req, res) => {
 }
 
 const createProduct = (req, res) => {
-    const path = '/product/images' 
-        const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }]) 
-        upload(req, res, async function (err) {
-            try {
-                const { images } = req.files
-                const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
-                let imagesFile = images.map(element => {
-                    return `${path}/${element.filename}`
-                });
-                const dataProduct = {
-                    name: name,
-                    detail: detail, 
-                    summary: summary,
-                    category: category,
-                    recommendation: recommendation,
-                    price: price,
-                    discountId: discountId,
-                    images: imagesFile,
-                    size: size,
-                    deleted: deleted,
-                    category:category
-                }
-                console.log(`${path}/${images[0].filename}`) // path file untuk dimasukan ke db
+    const path = '/product/images'
+    const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }]) 
+    upload(req, res, async (err) => {
+        const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
+        const imagesLink = req.body.imagesLink
+        const { images } = req.files
+        try {
+        if (!images) {
+            const img = imagesLink
+            const dataProduct = {
+                name: name,
+                detail: detail,
+                summary: summary,
+                category: category,
+                recommendation: recommendation,
+                price: price,
+                images: img,
+                size: size
+            }
+            const addProduct = await Product.create(dataProduct)
+                res.json({
+                    message: "succesfull",
+                    result: addProduct
+                })
+  
+        } else {
+            const imagesFile = images.map(element => {
+                return `${path}/${element.filename}`
+            });
+            const imgMix = imagesFile.concat(imagesLink)
+            const dataProduct = {
+                name: name,
+                detail: detail,
+                summary: summary,
+                category: category,
+                recommendation: recommendation,
+                price: price,
+                images: imgMix,
+                size: size
+            }
                 const addProduct = await Product.create(dataProduct)
                 res.json({
                     message: "succesfull",
-                    data: `${path}/${images[0].filename}`,
                     result: addProduct
                 })
-            } catch (error) {
-                console.log(error);
-                console.log(err)
-                res.status(500).json({
-                    message: "failed",
-                    result: err
-                })
-            } 
-        })
+            }
+        } catch (error) {
+            res.send({err})
+        }
+    })
     
 }
 
@@ -75,23 +89,62 @@ const getProductById = async (req, res) => {
     }
 }
 
-const editProduct = async (req, res) => {
-    const data = req.body
-    // const { name, detail, thumbnail, recommendation, price, images, deleted } = req.body
-    // const dataProduct = {
-    //     name: name, detail:detail, thumbnail: thumbnail, recommendation: recommendation, price: price, images: images, deleted: deleted
-    // }
-    const id = req.params.id
-    try {
-        const editedProduct = await Product.updateOne({ _id: id }, { $set: data }, { new: true })
-        if (!editedProduct.acknowledged) {
-            res.status(400).json({ message: 'failed', data: editedProduct })
-        } else {   
-            res.status(201).json({ message: 'successfully edit data', data: editedProduct })
+const updateImgProduct = (req, res, next) => {
+    const path = '/product/images'
+    const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }])
+    upload(req, res, async (err) => {
+        const id = req.params.id
+        const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
+        const imagesLink = req.body.images
+        const { images } = req.files
+        try {
+            if (!images) {
+                const img = imagesLink
+                const dataProduct = {
+                    name: name,
+                    detail: detail,
+                    summary: summary,
+                    category: category,
+                    recommendation: recommendation,
+                    price: price,
+                    images: img,
+                    size: size
+                }
+                const addProduct = await Product.updateOne({ _id: id }, { $set: dataProduct }, { new: true })
+                    res.status(200).json({
+                        message: "succesfull",
+                        result: addProduct
+                    })
+            } else {
+                const imagesFile = images.map(element => {
+                    return `${path}/${element.filename}`
+                });
+                const imgMix = imagesFile.concat(imagesLink)
+                const dataProduct = {
+                    name: name,
+                    detail: detail,
+                    summary: summary,
+                    category: category,
+                    recommendation: recommendation,
+                    price: price,
+                    images: imgMix,
+                    size: size
+                }
+                    const addProduct = await Product.updateOne({ _id: id }, { $set: dataProduct }, { new: true })
+                    res.json({
+                        message: "succesfull",
+                        result: addProduct
+                    })
+                
+            }
+        } catch (error) {
+            res.send(error)
         }
-    } catch (error) {
-        res.status(500).json({ message: "failed edit data" })
-    }
+    })
+}
+
+const editProduct = async (req, res) => {
+   res.send("okey")
 }
 
 const deleteProduct = async (req, res) => {
@@ -135,5 +188,12 @@ const searchProduct = async (req, res) => {
 }
 
 module.exports = {
-    getAllProduct, createProduct, getProductById, deleteProduct, editProduct, findProductCategory, searchProduct
+    getAllProduct,
+    createProduct,
+    getProductById,
+    deleteProduct,
+    editProduct,
+    findProductCategory,
+    searchProduct,
+    updateImgProduct
 }

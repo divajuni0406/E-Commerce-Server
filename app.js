@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 // Body Parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // Router
 app.use(router);
