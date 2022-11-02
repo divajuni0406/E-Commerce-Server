@@ -1,20 +1,58 @@
 const { Product } = require('../models/index')
 
 const getAllProduct = async (req, res) => {
-    try {
-        let product = await Product.find()
-        res.status(200).json({
-            statusCode: 200,
-            message: 'successfully get data',
-            result: product
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            statusCode: 500,
-            message: 'failed to get data'
-        })
+
+    if (req?.query?.page === undefined) {
+        console.log("page from all", req?.query?.page)
+        try {
+            let product = await Product.find()
+
+            res.status(200).json({
+                statusCode: 200,
+                message: 'successfully get data',
+                result: product
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                statusCode: 500,
+                message: 'failed to get data'
+            })
+        }
+    } else {
+        const page = req?.query?.page || 1
+        const limitProduct = 16
+
+        console.log("page", page)
+
+        const countProduct = await Product.count()
+        const maxPage = Math.ceil(countProduct / limitProduct)
+        console.log("maxPage", maxPage)
+
+        const pageStartOne = parseInt(page) === 1 ? 0 * limitProduct : page * limitProduct - limitProduct
+
+        try {
+            let product = await Product
+                .find()
+                .skip(pageStartOne)
+                .limit(limitProduct)
+
+            res.status(200).json({
+                statusCode: 200,
+                message: 'successfully get data',
+                result: product,
+                maxPage
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                statusCode: 500,
+                message: 'failed to get data'
+            })
+        }
     }
+
+
 }
 
 const createProduct = async (req, res) => {
