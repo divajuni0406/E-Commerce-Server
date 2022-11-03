@@ -1,7 +1,5 @@
 const { Product } = require('../models/index')
 const { uploader } = require('../helper/uploader')
-const fs = require('fs')
-const multer = require('multer')
 
 const getAllProduct = async (req, res) => {
     try {
@@ -94,10 +92,9 @@ const updateImgProduct = (req, res) => {
     const path = '/product/images'
     const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }])
     upload(req, res, async (err) => {
-        if(err) return res.status(500).json({message: "ada yang salah"})
         const id = req.params.id
         const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
-        const imagesLink = req.body.images
+        const imagesLink = req.body.imagesLink
         const { images } = req.files
         try {
             if (!images) {

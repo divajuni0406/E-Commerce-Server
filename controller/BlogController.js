@@ -1,7 +1,10 @@
 const { Blog } = require('../models')
+const path = '/blog/images'
+const {uploader} = require('../helper/uploader')
+const upload = uploader(path, 'BLOG').single('image')
+
 
 const getAllArticle = async (req, res) => {
-
     try {
         const getAlldata = await Blog.find()
         res.status(200).json({
@@ -16,6 +19,10 @@ const getAllArticle = async (req, res) => {
 
 
 const createArticle = async (req, res) => {
+    upload(req, res, async (err) => {
+        if (err) return res.status(500).json({ message: "Image must one" })
+    })
+        
     const data = req.body
     const dataArticle = {
         title: data.title,
