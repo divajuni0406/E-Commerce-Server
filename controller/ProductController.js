@@ -105,7 +105,7 @@ const deleteProduct = async (req, res) => {
     const id = req.params.id
     try {
         const deletedProduct = await Product.findByIdAndDelete({ _id: id })
-        res.status(401).json({ message: 'successfully delete data', deletedProduct: deletedProduct })
+        res.status(200).json({ message: 'successfully delete data', deletedProduct: deletedProduct })
     } catch (error) {
         res.status(500).json({ message: 'failed to delete data' })
     }

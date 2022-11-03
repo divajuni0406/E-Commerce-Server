@@ -49,10 +49,10 @@ describe('CRUD Product', () => {
 
 	describe('get product by id', () => {
 		test('should return 200 and get the product by id', async () => {
-			const response = await request(app).get('/api/product/63331cbba3622624405eca0c')
+			const response = await request(app).get(`/api/product/${id}`)
 			expect(response.statusCode).toBe(200)
 			// console.log(response._body.product)
-			expect(response._body.product._id).toBe('63331cbba3622624405eca0c')
+			expect(response._body.product._id).toBe(`${id}`)
 			// expect(response.result.length).toBeGreaterThan(16)
 		})
 
@@ -134,7 +134,7 @@ describe('CRUD Product', () => {
 	});
 
 	describe('edit product', () => {
-		test('should edit the product', async () => {
+		test('should edit the product if user is admin', async () => {
 			const response = await request(app)
 				.patch(`/api/edit-data/${id}`)
 				.send({
@@ -145,7 +145,7 @@ describe('CRUD Product', () => {
 			expect(response.statusCode).toBe(201);
 		});
 
-		test('should not edit the product if not admin', async () => {
+		test('should not edit the product if user is not admin and token not set', async () => {
 			const response = await request(app)
 				.patch(`/api/edit-data/${id}`)
 				.send({
@@ -169,13 +169,12 @@ describe('CRUD Product', () => {
 
 	describe('delete product', () => {
 
-		//product deleted but return 401
-		// test('should delete a product if admin', async () => {
-		// 	const response = await request(app)
-		// 		.delete(`/api/delete-product/${id}`)
-		// 		.set("Authorization", `Bearer ${token}`)
-		// 	expect(response.statusCode).toBe(200);
-		// })
+		test('should delete a product if admin', async () => {
+			const response = await request(app)
+				.delete(`/api/delete-product/${id}`)
+				.set("Authorization", `Bearer ${token}`)
+			expect(response.statusCode).toBe(200);
+		})
 
 		test('should not delete a product if token not set', async () => {
 			const response = await request(app)

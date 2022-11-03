@@ -13,7 +13,7 @@ const getAllArticle = async (req, res) => {
             })
         } catch (error) {
             console.log(error);
-            res.status(404).json({ message: "faile to get data" })
+            res.status(500).json({ message: "faile to get data" })
         }
     }
     else {
@@ -41,7 +41,7 @@ const getAllArticle = async (req, res) => {
             })
         } catch (error) {
             console.log(error);
-            res.status(404).json({ message: "faile to get data" })
+            res.status(500).json({ message: "faile to get data" })
         }
     }
 }
@@ -59,11 +59,12 @@ const createArticle = async (req, res) => {
     try {
         const createData = await Blog.create(dataArticle)
         res.status(200).json({
-            message: "succesfully create data"
+            message: "succesfully create data",
+            result: createData
         })
     } catch (error) {
         console.log(error);
-        res.send({ message: error })
+        res.status(500).json({ message: error })
     }
 }
 
