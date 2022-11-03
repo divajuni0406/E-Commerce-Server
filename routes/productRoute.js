@@ -14,11 +14,7 @@ route.get("/api/productCategory", findProductCategory);
 route.post("/api/searchProduct", searchProduct);
 route.post("/api/create-product", createProduct);
 route.get("/api/product/:id", getProductById);
-route.patch("/api/edit-data/:id",updateImgProduct);
+route.patch("/api/edit-data/:id", updateImgProduct);
 route.delete("/api/delete-product/:id", authApiAdmin, deleteProduct);
-route.post("/detail", (req, res) => {
-  const detail = req.body;
-  res.send(detail);
-});
 
 module.exports = route;
