@@ -1,0 +1,12 @@
+const app = require('../app')
+const PORT = process.env.PORT || 5000;
+const mongoConnect = require('../config/mongodb').main
+
+// Mongo Connection
+mongoConnect()
+.then(()=>{
+    // Run Server
+    app.listen(PORT, () => {
+        console.log(`listen on port ${PORT}`);
+    });
+});
