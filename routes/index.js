@@ -10,7 +10,7 @@ const Route = require('./route')
 const ProductRoute = require('./productRoute')
 const midtransRoute = require('./midtrans')
 const MailRoute = require('./mailerRoute')
-
+const BannerRoute = require('./bannerRoute')
 const BlogRoute = require('./blogRoute')
 
 route.use(UserRoute);
@@ -24,5 +24,6 @@ route.use(BlogRoute)
 route.use(AuthRender)
 route.use(CartRoute)
 route.use(MailRoute)
+route.use(BannerRoute)
 
 module.exports = route
