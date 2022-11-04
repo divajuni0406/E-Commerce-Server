@@ -42,13 +42,6 @@ describe("search by category", () => {
       "application/json; charset=utf-8"
     );
   });
-  it("should error to search by category if there is something wrong else", async () => {
-    const response = await request(router).get("/api/productCategory").send({
-      a: "/",
-    });
-    console.log(response._body, "alllllllllllllllllllllllllll");
-    expect(response.statusCode).toBe(500);
-  });
 });
 
 describe("search products", () => {

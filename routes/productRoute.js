@@ -2,7 +2,6 @@ const route = require("express").Router();
 const { getAllProduct, createProduct, getProductById, deleteProduct, editProduct, findProductCategory, searchProduct } = require("../controller/ProductController");
 const { authApiAdmin } = require('../controller/authorizeRoutes')
 
-// authorization belum buat
 route.get("/api/product", getAllProduct);
 route.get("/api/productCategory", findProductCategory);
 route.post("/api/searchProduct", searchProduct);

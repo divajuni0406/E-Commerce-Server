@@ -25,11 +25,6 @@ app.use(router);
 // Mongo Connection
 mongoConnect();
 
-// // Run Server
-// app.listen(port, () => {
-//   console.log(`listen on port ${port}`);
-// });
-
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {
     console.log(`listen on port ${port}`);

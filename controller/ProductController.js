@@ -101,7 +101,7 @@ const findProductCategory = async (req, res) => {
   const { category } = req.body;
   try {
     const findProducts = await Product.find({
-      category: category.toLowerCase(),
+      category: category?.toLowerCase(),
     });
     if (findProducts.length > 0) {
       res.send({
