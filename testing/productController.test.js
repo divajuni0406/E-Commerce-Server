@@ -20,10 +20,10 @@ afterEach(async () => {
 describe("search by category", () => {
   // success
   it("should success to search products by category if user choose any category and products available", async () => {
-    const response = await request(router).get("/api/productCategory").send({
+    const response = await request(router).post("/api/productCategory").send({
       category: "baju",
     });
-    console.log(response._body.result.length, "alllllllllllllllllllllllllll");
+    console.log(response, "alllllllllllllllllllllllllll");
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"

@@ -49,6 +49,7 @@ describe("sign up", () => {
       email: "jest",
       password: "jest",
       name: "jest",
+      birthdate: "08",
     });
     console.log(
       "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",

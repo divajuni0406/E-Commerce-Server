@@ -1,9 +1,17 @@
 const route = require("express").Router();
-const { getAllProduct, createProduct, getProductById, deleteProduct, editProduct, findProductCategory, searchProduct } = require("../controller/ProductController");
-const { authApiAdmin } = require('../controller/authorizeRoutes')
+const {
+  getAllProduct,
+  createProduct,
+  getProductById,
+  deleteProduct,
+  editProduct,
+  findProductCategory,
+  searchProduct,
+} = require("../controller/ProductController");
+const { authApiAdmin } = require("../controller/authorizeRoutes");
 
 route.get("/api/product", getAllProduct);
-route.get("/api/productCategory", findProductCategory);
+route.post("/api/productCategory", findProductCategory);
 route.post("/api/searchProduct", searchProduct);
 route.post("/api/create-product", authApiAdmin, createProduct);
 route.get("/api/product/:id", getProductById);
