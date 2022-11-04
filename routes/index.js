@@ -12,6 +12,7 @@ const midtransRoute = require('./midtrans')
 const MailRoute = require('./mailerRoute')
 
 const BlogRoute = require('./blogRoute')
+const CategoryRoute = require('./categoryRoute')
 
 route.use(UserRoute);
 route.use(ProductListRoute);
@@ -24,5 +25,6 @@ route.use(BlogRoute)
 route.use(AuthRender)
 route.use(CartRoute)
 route.use(MailRoute)
+route.use(CategoryRoute)
 
 module.exports = route
