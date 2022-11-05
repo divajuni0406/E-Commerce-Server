@@ -6,11 +6,13 @@ const {
     deleteBanner,
     getAllBanner
 } = require('../controller/BannerController')
+const { authApiAdmin } = require('../controller/authorizeRoutes')
 
-route.post('/api/banner/create-banner', createBanner)
-route.patch('/api/banner/update-banner/:id', updateBanner)
-route.get('/api/banner/:id', findBannerById)
-route.delete('/api/banner/delete/:id', deleteBanner)
+
+route.post('/api/banner/create-banner', authApiAdmin,createBanner)
+route.patch('/api/banner/update-banner/:id', authApiAdmin,updateBanner)
+route.get('/api/banner/:id', authApiAdmin,findBannerById)
+route.delete('/api/banner/delete/:id', authApiAdmin,deleteBanner)
 route.get('/api/banners/all', getAllBanner)
 
 
