@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const Cryptr = require("cryptr");
-const SecretKey = "secretKey";
+const Cryptr = require('cryptr');
+const SecretKey = 'secretKey';
 const passConverter = new Cryptr(SecretKey);
 
 exports.signup = async (req, res) => {
@@ -25,6 +25,24 @@ exports.signup = async (req, res) => {
             status: 'success',
             token,
             newUser,
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err.message,
+        });
+    }
+};
+
+exports.getUsers = async (req, res) => {
+    try {
+        const user = await User.find({});
+        console.log(user);
+
+        res.status(200).json({
+            status: 'success',
+            result: user.length,
+            data: user,
         });
     } catch (err) {
         res.status(400).json({

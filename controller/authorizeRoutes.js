@@ -10,7 +10,7 @@ exports.authApiGeneral = async (req, res, next) => {
   let authHeader = req.headers["authorization"];
   let authToken = authHeader && authHeader.split(" ")[1];
   if (!authToken || authToken === null || authToken === "") {
-    return res.status(401).redirect("/authorization");
+    return res.status(401).redirect(401, "/authorization");
   }
   try {
     let user = await JWT.verify(authToken, process.env.JWT_TOKEN_SECRET);
@@ -27,9 +27,9 @@ exports.authApiGeneral = async (req, res, next) => {
 exports.authApiAdmin = async (req, res, next) => {
   let authHeader = req.headers["authorization"];
   let authToken = authHeader && authHeader.split(" ")[1];
-  console.log('sfdfdfdfdfdfdfd', authToken)
+  console.log("sfdfdfdfdfdfdfd", authToken);
   if (!authToken || authToken === null || authToken === "") {
-    console.log('assasassa')
+    console.log("assasassa");
     return res.status(401).redirect("/authorization");
   }
   try {

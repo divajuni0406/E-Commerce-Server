@@ -4,6 +4,7 @@ const { ObjectId } = require('mongodb')
 const getCart=async(req,res)=>{
     let userId = req.params.userId
     try {
+        console.log('masuk testing ga error')
         const getCart = await Cart.findOne({userId:userId, status:'unpaid'})
         if(getCart){
             const carts = await CartDetail.aggregate([
@@ -15,15 +16,16 @@ const getCart=async(req,res)=>{
                     as:'product'
                 }}
             ])
-    
+            
             carts.forEach((val)=>{
                 val.timestamp = ObjectId(val._id).getTimestamp()
             })
-            return res.json({carts})
+            return res.status(200).json({carts:[]})
         }
-            return res.json({message:'no cart', carts:[]})
+        return res.json({message:'no cart', carts:[]})
     } catch (error) {
-        console.log(error)        
+        console.log('error test', error)
+        res.status(500).json({message:error})        
     }
 }
 
