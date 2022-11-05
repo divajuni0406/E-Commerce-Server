@@ -213,10 +213,10 @@ describe("search by category", () => {
 
   // wrong
   it("should no products available to search by category if there is something wrong from user or developer", async () => {
-    const response = await request(router).get("/api/productCategory").send({
-      category: "/",
+    const response = await request(router).post("/api/productCategory").send({
+      category: "",
     });
-    console.log(response._body, "alllllllllllllllllllllllllll");
+    console.log(response.headers, "alllllllllllllllllllllllllll");
     expect(response.statusCode).toBe(404);
     expect(response.headers["content-type"]).toBe(
       "application/json; charset=utf-8"

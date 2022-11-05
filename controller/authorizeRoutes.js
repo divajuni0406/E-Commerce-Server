@@ -34,6 +34,7 @@ exports.authApiAdmin = async (req, res, next) => {
   }
   try {
     let authApi = await JWT.verify(authToken, process.env.JWT_TOKEN_SECRET);
+    console.log(authApi.role === "admin", "llllllllllllllllllllllllllllll");
     if (authApi.role == "admin") {
       return next();
     }
