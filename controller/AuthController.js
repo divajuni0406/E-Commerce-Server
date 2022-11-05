@@ -53,7 +53,6 @@ exports.getUsers = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     try {
-        console.log(req.params.id);
         await User.findByIdAndDelete(req.params.id);
 
         res.status(204);
