@@ -11,7 +11,7 @@ const createBanner = (req, res) => {
             const imgLink = req.body.image
             if (!image) {
                 const data = {
-                    image: imgLink[1],
+                    image: imgLink,
                     active: req.body.active
                 }
                 const addBanner = await Banner.create(data)
@@ -20,7 +20,7 @@ const createBanner = (req, res) => {
                     result: addBanner
                 }) 
             } else {
-                const imgBanner = `${path}/${image.filename}`
+                const imgBanner = `http://localhost:5000${path}/${image.filename}`
                 const data = {
                     image: imgBanner,
                     active: req.body.active
@@ -47,7 +47,7 @@ const updateBanner = (req, res) => {
             if (!image) {
                 const { active } = req.body
                 const data = {
-                    image: imgLink[1],
+                    image: imgLink,
                     active: active
                 }
                 const editBanner = await Banner.updateOne({ _id: id }, { $set: data }, { new: true })
@@ -56,7 +56,7 @@ const updateBanner = (req, res) => {
                     result: editBanner
                 }) 
             } else {
-                const imgBanner = `${path}/${image.filename}`
+                const imgBanner = `http://localhost:5000${path}/${image.filename}`
                 const { active } = req.body
                 const data = {
                     image: imgBanner,
@@ -78,7 +78,7 @@ const deleteBanner = async (req, res) => {
     const id = req.params.id
     try {
         const deleteBanner = await Banner.findByIdAndDelete({ _id: id })
-        res.status(401).json({ message: 'successfully delete data', deletedProduct: deleteBanner })
+        res.status(200).json({ message: 'successfully delete data', deletedProduct: deleteBanner })
     } catch (error) {
         res.status(500).json({ message: 'failed to delete data' })
     }
