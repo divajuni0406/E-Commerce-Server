@@ -146,7 +146,7 @@ exports.forgotPasswordVerification = async (req, res) => {
         from: "Sober Team <idhamdummy1@gmail.com>",
         to: email,
         subject: "Link To Reset Password",
-        html: `<p>Dear Mr/Mrs/Ms ${name} Please Click Link Below to Reset Your Password</p> <p>${process.env.CLIENT_URL}/resetPassword/${token}`,
+        html: `<p>Dear Mr/Mrs/Ms ${name} Please Click Link Below to Reset Your Password</p> <p>${process.env.CLIENT_URL}/reset-password/${token}`,
       };
       const resetPass = await resetPasswordVerif(templateEmail);
       if (resetPass) {

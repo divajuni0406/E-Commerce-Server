@@ -1,6 +1,6 @@
 const request = require("supertest");
 const router = require("../app.js");
-let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzE1YTgwZGI0ZmFjNjJkNjA2NzA5YyIsInVzZXJuYW1lIjoiZGl2YWp1bmkiLCJlbWFpbCI6ImRpdmFqdW5pIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjY3MjA3MTA5LCJleHAiOjE2NjcyOTM1MDl9.dWBrMQehUqGDlr53l36_Ym3HEyIiq1FpLZZde2HhJgQ`;
+let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMzE1YTgwZGI0ZmFjNjJkNjA2NzA5YyIsInVzZXJuYW1lIjoiZGl2YWp1bmkiLCJlbWFpbCI6ImRpdmFqdW5pIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjY3NTIwODQ4LCJleHAiOjE2Njc2MDcyNDh9.0ZaWSsTaEp_twBbW1vntXFVDpqyahcsuKrd59D3dPB8`;
 jest.setTimeout(30000);
 
 const mongoose = require("mongoose");

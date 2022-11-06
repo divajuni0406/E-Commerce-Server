@@ -37,13 +37,25 @@ exports.signup = async (req, res) => {
 exports.getUsers = async (req, res) => {
     try {
         const user = await User.find({});
-        console.log(user);
 
         res.status(200).json({
             status: 'success',
             result: user.length,
             data: user,
         });
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err.message,
+        });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+
+        res.status(204);
     } catch (err) {
         res.status(400).json({
             status: 'fail',
