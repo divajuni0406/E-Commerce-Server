@@ -2,8 +2,10 @@ const { Product } = require('../models/index')
 const { uploader } = require('../helper/uploader')
 
 const getAllProduct = async (req, res) => {
+  const page = req?.query?.page
+  const category = req?.query?.category
 
-  if (req?.query?.page === undefined) {
+  if ((page === undefined) && (category === undefined)) {
     console.log("page from all", req?.query?.page)
     try {
       let product = await Product.find()
@@ -24,9 +26,12 @@ const getAllProduct = async (req, res) => {
     const page = req?.query?.page || 1
     const limitProduct = 16
 
-    console.log("page", page)
+    // console.log("page", page)
 
-    const countProduct = await Product.count()
+    const countProduct = await Product.find(category ? { category: category } : null).count() //diubah find cat
+    // const categoryData = await Product.find({
+    //   category: category?.toLowerCase(),
+    // })
     const maxPage = Math.ceil(countProduct / limitProduct)
     console.log("maxPage", maxPage)
 
@@ -34,7 +39,7 @@ const getAllProduct = async (req, res) => {
 
     try {
       let product = await Product
-        .find()
+        .find(category ? { category: category } : null)
         .skip(pageStartOne)
         .limit(limitProduct)
 
@@ -204,7 +209,7 @@ const findProductCategory = async (req, res) => {
   const { category } = req.body;
   try {
     const findProducts = await Product.find({
-      category: category.toLowerCase(),
+      category: category?.toLowerCase(),
     });
     if (findProducts.length > 0) {
       res.send({
