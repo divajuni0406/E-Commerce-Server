@@ -55,7 +55,7 @@ const postCart=async(req,res)=>{
                 as:'product'
             }}
         ])
-        return res.json({message:'post cart berhasil', carts:carts})
+        return res.status(201).json({message:'post cart berhasil', carts:carts})
     } catch (error) {
         console.log(error)
     }
@@ -63,6 +63,8 @@ const postCart=async(req,res)=>{
 
 const changeQtyProductInCart=async(req,res)=>{
     const { cartId, productId, quantity, size } = req.body
+
+    console.log('masuk', cartId, productId, quantity, size)
 
     try {
         await CartDetail.findOneAndUpdate({cartId, productId,size}, {$set:{quantity:quantity}})
@@ -74,8 +76,6 @@ const changeQtyProductInCart=async(req,res)=>{
 
 const deleteProductInCart=async(req,res)=>{
     const { cartId, productId, size } = req.body
-    console.log(cartId, productId)
-
     try {
         await CartDetail.findOneAndRemove({cartId, productId, size})
         res.json({message:'berhasil delete'})
@@ -85,18 +85,8 @@ const deleteProductInCart=async(req,res)=>{
 }
 
 
-const checkoutCart=async(req,res)=>{
-    try {
-        let cartUser = await Cart.updateOne({_id:'6328502d901d41e754ca2858', status:'unpaid'}, {$set:{status:'paid'}})
-        return res.json({cart:cartUser})
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
 
 
 module.exports = {
-    getCart,postCart,checkoutCart,changeQtyProductInCart,deleteProductInCart
+    getCart,postCart,changeQtyProductInCart,deleteProductInCart
 }
