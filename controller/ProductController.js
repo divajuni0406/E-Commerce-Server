@@ -1,9 +1,11 @@
-const { Product } = require('../models/index')
-const { uploader } = require('../helper/uploader')
+const { Product } = require('../models/index');
+const { uploader } = require('../helper/uploader');
 
 const getAllProduct = async (req, res) => {
+  const page = req?.query?.page
+  const category = req?.query?.category
 
-  if (req?.query?.page === undefined) {
+  if ((page === undefined) && (category === undefined)) {
     console.log("page from all", req?.query?.page)
     try {
       let product = await Product.find()
@@ -24,17 +26,21 @@ const getAllProduct = async (req, res) => {
     const page = req?.query?.page || 1
     const limitProduct = 16
 
-    console.log("page", page)
+    // console.log("page", page)
 
-    const countProduct = await Product.count()
+    const countProduct = await Product.find(category ? { category: category } : null).count() //diubah find cat
+    // const categoryData = await Product.find({
+    //   category: category?.toLowerCase(),
+    // })
     const maxPage = Math.ceil(countProduct / limitProduct)
     console.log("maxPage", maxPage)
 
-    const pageStartOne = parseInt(page) === 1 ? 0 * limitProduct : page * limitProduct - limitProduct
+    const pageStartOne =
+      parseInt(page) === 1 ? 0 * limitProduct : page * limitProduct - limitProduct;
 
     try {
       let product = await Product
-        .find()
+        .find(category ? { category: category } : null)
         .skip(pageStartOne)
         .limit(limitProduct)
 
@@ -42,29 +48,46 @@ const getAllProduct = async (req, res) => {
         statusCode: 200,
         message: 'successfully get data',
         result: product,
-        maxPage
-      })
+        maxPage,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).json({
         statusCode: 500,
-        message: 'failed to get data'
-      })
+        message: 'failed to get data',
+      });
     }
   }
-}
+};
 
 const createProduct = (req, res) => {
-  const path = '/product/images'
-  const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }])
+  const host =
+    process.env.NODE_ENV === 'development'
+      ? process.env.DEV_HOST
+      : process.env.PROD_HOST;
+  const path = `/product/images`;
+  const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }]);
   upload(req, res, async (err) => {
-    if (err) return res.status(500).json({ message: "Failed" })
-    const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
-    const imagesLink = req.body.imagesLink
-    const { images } = req.files
+    console.log(req.body);
+    console.log(req.files);
+    if (err) return res.status(500).json({ message: 'Failed' });
+    const {
+      name,
+      detail,
+      summary,
+      category,
+      recommendation,
+      price,
+      discountId,
+      size,
+      deleted,
+    } = req.body;
+    const imagesLink = req.body.imagesLink;
+    const { images } = req.files;
     try {
+      console.log('img', images);
       if (!images) {
-        const img = imagesLink
+        const img = imagesLink;
         const dataProduct = {
           name: name,
           detail: detail,
@@ -73,19 +96,19 @@ const createProduct = (req, res) => {
           recommendation: recommendation,
           price: price,
           images: img,
-          size: size
-        }
-        const addProduct = await Product.create(dataProduct)
+          size: size,
+        };
+        const addProduct = await Product.create(dataProduct);
         res.json({
-          message: "succesfull",
-          result: addProduct
-        })
-
-      } else {
-        const imagesFile = images.map(element => {
-          return `${path}/${element.filename}`
+          message: 'succesfull',
+          result: addProduct,
         });
-        const imgMix = imagesFile.concat(imagesLink)
+      } else {
+        const imagesFile = images.map((element) => {
+          return `${host}${path}/${element.filename}`;
+        });
+        const imgMix = imagesFile.concat(imagesLink);
+        console.log('imgMix', imgMix);
         const dataProduct = {
           name: name,
           detail: detail,
@@ -94,20 +117,20 @@ const createProduct = (req, res) => {
           recommendation: recommendation,
           price: price,
           images: imgMix,
-          size: size
-        }
-        const addProduct = await Product.create(dataProduct)
+          size: size,
+        };
+        const addProduct = await Product.create(dataProduct);
         res.json({
-          message: "succesfull",
-          result: addProduct
-        })
+          message: 'succesfull',
+          result: addProduct,
+        });
       }
     } catch (error) {
-      res.send({ err })
+      console.log(error);
+      res.send({ err });
     }
-  })
-
-}
+  });
+};
 
 const getProductById = async (req, res) => {
   const id = req.params.id;
@@ -115,25 +138,40 @@ const getProductById = async (req, res) => {
     const product = await Product.findById({ _id: id });
     res.status(200).json({
       statusCode: 200,
-      message: "successfully get data",
+      message: 'successfully get data',
       product: product,
     });
   } catch (error) {
-    res.status(500).json({ message: "failed to get data" });
+    res.status(500).json({ message: 'failed to get data' });
   }
 };
 
 const updateImgProduct = (req, res) => {
-  const path = '/product/images'
-  const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }])
+  const host =
+    process.env.NODE_ENV === 'development'
+      ? process.env.DEV_HOST
+      : process.env.PROD_HOST;
+  const path = '/product/images';
+  const upload = uploader(path, 'PRODUCT').fields([{ name: 'images' }]);
   upload(req, res, async (err) => {
-    const id = req.params.id
-    const { name, detail, summary, category, recommendation, price, discountId, size, deleted } = req.body
-    const imagesLink = req.body.imagesLink
-    const { images } = req.files
+    const id = req.params.id;
+    const {
+      name,
+      detail,
+      summary,
+      category,
+      recommendation,
+      price,
+      discountId,
+      size,
+      deleted,
+    } = req.body;
+    const imagesLink = req.body.imagesLink;
+    const { images } = req.files;
     try {
+      console.log('img', images);
       if (!images) {
-        const img = imagesLink
+        const img = imagesLink;
         const dataProduct = {
           name: name,
           detail: detail,
@@ -142,18 +180,22 @@ const updateImgProduct = (req, res) => {
           recommendation: recommendation,
           price: price,
           images: img,
-          size: size
-        }
-        const addProduct = await Product.updateOne({ _id: id }, { $set: dataProduct }, { new: true })
+          size: size,
+        };
+        const addProduct = await Product.updateOne(
+          { _id: id },
+          { $set: dataProduct },
+          { new: true }
+        );
         res.status(200).json({
-          message: "succesfull",
-          result: addProduct
-        })
-      } else {
-        const imagesFile = images.map(element => {
-          return `${path}/${element.filename}`
+          message: 'succesfull',
+          result: addProduct,
         });
-        const imgMix = imagesFile.concat(imagesLink)
+      } else {
+        const imagesFile = images.map((element) => {
+          return `${host}${path}/${element.filename}`;
+        });
+        const imgMix = imagesFile.concat(imagesLink);
         const dataProduct = {
           name: name,
           detail: detail,
@@ -162,61 +204,65 @@ const updateImgProduct = (req, res) => {
           recommendation: recommendation,
           price: price,
           images: imgMix,
-          size: size
-        }
-        const addProduct = await Product.updateOne({ _id: id }, { $set: dataProduct }, { new: true })
+          size: size,
+        };
+        const addProduct = await Product.updateOne(
+          { _id: id },
+          { $set: dataProduct },
+          { new: true }
+        );
         res.json({
-          message: "succesfull",
-          result: addProduct
-        })
-
+          message: 'succesfull',
+          result: addProduct,
+        });
       }
     } catch (error) {
-      res.send(error)
+      res.send(error);
     }
-  })
-}
+  });
+};
 
 const editProduct = async (req, res) => {
   const data = req.body;
   const id = req.params.id;
   try {
     const editedProduct = await Product.updateOne({ _id: id }, { $set: data });
-    res
-      .status(201)
-      .json({ message: "successfully edit data", data: editedProduct });
+    res.status(201).json({ message: 'successfully edit data', data: editedProduct });
   } catch (error) {
-    res.status(500).json({ message: "failed edit data" });
+    res.status(500).json({ message: 'failed edit data' });
   }
 };
 
 const deleteProduct = async (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
   try {
-    const deletedProduct = await Product.findByIdAndDelete({ _id: id })
-    res.status(200).json({ message: 'successfully delete data', deletedProduct: deletedProduct })
+    const deletedProduct = await Product.findByIdAndDelete({ _id: id });
+    res.status(200).json({
+      message: 'successfully delete data',
+      deletedProduct: deletedProduct,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'failed to delete data' })
+    res.status(500).json({ message: 'failed to delete data' });
   }
-}
+};
 
 const findProductCategory = async (req, res) => {
   const { category } = req.body;
   try {
     const findProducts = await Product.find({
-      category: category.toLowerCase(),
+      category: category?.toLowerCase(),
     });
     if (findProducts.length > 0) {
       res.send({
-        message: "Successfull to get products by category",
+        message: 'Successfull to get products by category',
         statusCode: 200,
         result: findProducts,
       });
     } else if (findProducts.length === 0) {
-      res.status(404).send({ message: "Products Not Found", statusCode: 404 });
+      res.status(404).send({ message: 'Products Not Found', statusCode: 404 });
     } else {
       res.status(400).send({
-        message: "Failed to find products, something wrong!",
+        message: 'Failed to find products, something wrong!',
         statusCode: 400,
       });
     }
@@ -228,10 +274,10 @@ const findProductCategory = async (req, res) => {
 
 const searchProduct = async (req, res) => {
   const { search } = req.body;
-  console.log(search, "jssssssssssssssssssssssss");
+  console.log(search, 'jssssssssssssssssssssssss');
   if (search === undefined) {
     res.status(400).send({
-      message: "something wrong in search",
+      message: 'something wrong in search',
       statusCode: 400,
     });
     return;
@@ -239,23 +285,23 @@ const searchProduct = async (req, res) => {
   try {
     const searchProduct = await Product.find({
       $or: [
-        { name: { $regex: new RegExp(search, "i") } },
-        { detail: { $regex: new RegExp(search, "i") } },
-        { category: { $regex: new RegExp(search, "i") } },
-        { summary: { $regex: new RegExp(search, "i") } },
+        { name: { $regex: new RegExp(search, 'i') } },
+        { detail: { $regex: new RegExp(search, 'i') } },
+        { category: { $regex: new RegExp(search, 'i') } },
+        { summary: { $regex: new RegExp(search, 'i') } },
       ],
     });
     if (searchProduct.length > 0) {
       res.send({
-        message: "Successfull to get products",
+        message: 'Successfull to get products',
         statusCode: 200,
         result: searchProduct,
       });
     } else if (searchProduct.length === 0) {
-      res.status(404).send({ message: "Products Not Found", statusCode: 404 });
+      res.status(404).send({ message: 'Products Not Found', statusCode: 404 });
     } else {
       res.status(400).send({
-        message: "Failed to find products, something wrong!",
+        message: 'Failed to find products, something wrong!',
         statusCode: 400,
       });
     }
@@ -273,5 +319,5 @@ module.exports = {
   editProduct,
   findProductCategory,
   searchProduct,
-  updateImgProduct
-}
+  updateImgProduct,
+};

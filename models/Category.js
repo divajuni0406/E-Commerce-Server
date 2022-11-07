@@ -1,7 +1,8 @@
 const Mongoose = require("mongoose");
 
 const categorySchema = new Mongoose.Schema({
-  categoryName: { type: Mongoose.Schema.Types.ObjectId },
+  name: { type: String },
+  deleted: {type: Boolean}
 });
 
 const Category = Mongoose.model("Category", categorySchema);
