@@ -6,6 +6,5 @@ route.get('/cart/:userId', authApiGeneral, getCart)
 route.post('/cart', authApiGeneral, postCart)
 route.post('/delete-product-incart', authApiGeneral, deleteProductInCart)
 route.patch('/cart', authApiGeneral, changeQtyProductInCart)
-route.delete('/checkout-cart', authApiGeneral, checkoutCart)
 
 module.exports = route
