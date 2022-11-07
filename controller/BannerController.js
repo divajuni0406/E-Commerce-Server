@@ -10,7 +10,7 @@ const createBanner = (req, res) => {
             const image = req.file
             const imgLink = req.body.image
             if (!image) {
-                if(!req.body.image && !req.body.active){throw Error}
+                if (!req.body.image && !req.body.active) { throw Error }
                 const data = {
                     image: imgLink,
                     active: req.body.active
@@ -19,14 +19,14 @@ const createBanner = (req, res) => {
                 res.status(200).json({
                     message: "succes create",
                     result: addBanner
-                }) 
+                })
             } else {
-                const imgBanner = `https://api-v2-sober.herokuapp.com/${path}/${image.filename}`
+                const imgBanner = `https://api-v2-sober.herokuapp.com${path}/${image.filename}`
                 const data = {
                     image: imgBanner,
                     active: req.body.active
                 }
-               
+
                 const addBanner = await Banner.create(data)
                 res.status(200).json({
                     message: "succes create",
@@ -47,7 +47,7 @@ const updateBanner = (req, res) => {
             const image = req.file
             const imgLink = req.body.image
             if (!image) {
-                if(!req.body.image && !req.body.active){throw Error}
+                if (!req.body.image && !req.body.active) { throw Error }
                 const { active } = req.body
                 const data = {
                     image: imgLink,
@@ -59,14 +59,14 @@ const updateBanner = (req, res) => {
                     result: editBanner
                 })
             } else {
-                if(!req.body.active){throw Error}
-                const imgBanner = `http://localhost:5000${path}/${image.filename}`
+                if (!req.body.active) { throw Error }
+                const imgBanner = `https://api-v2-sober.herokuapp.com${path}/${image.filename}`
                 const { active } = req.body
                 const data = {
                     image: imgBanner,
                     active: active
                 }
-                const editBanner = await Banner.updateOne({ _id: id }, { $set: { active:active, image: imgBanner } }, { new: true })
+                const editBanner = await Banner.updateOne({ _id: id }, { $set: { active: active, image: imgBanner } }, { new: true })
                 res.status(200).json({
                     message: "succes update",
                     result: editBanner
